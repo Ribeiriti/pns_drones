@@ -1,0 +1,123 @@
+openapi: 3.0.1
+info:
+  title: Gestão de Montagem de Drones
+  description: API para o processo de gestão de drones
+  version: 1.0.0
+
+servers:
+  - url: https://api.drones.com
+
+paths:
+  /api/auth/registo:
+    post:
+      summary: Registar
+      description: Cria uma nova conta de utilizador
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterRequest'
+      responses:
+        '201':
+          description: Criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegisterResponse'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /api/auth/login:
+    post:
+      summary: Login
+      description: Autentica o utilizador e devolve o token
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLoginResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserRegisterRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+          format: email
+      required:
+        - username
+        - password
+        - email
+
+    UserRegisterResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    UserLoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+
+    UserLoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Auth
+    description: Authentication endpoints
+
+  - name: Users
+    description: User management endpoints

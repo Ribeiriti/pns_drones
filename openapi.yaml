@@ -11,9 +11,9 @@ paths:
   /api/auth/registo:
     post:
       summary: Registar
-      description: Cria uma nova conta de utilizador
+      description: Criar uma nova conta de utilizador
       tags:
-        - Auth
+        - Users
       requestBody:
         required: true
         content:
@@ -22,13 +22,13 @@ paths:
               $ref: '#/components/schemas/UserRegisterRequest'
       responses:
         '201':
-          description: Criado
+          description: Sucesso
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserRegisterResponse'
         400:
-          description: Bad request
+          description: Erro
           content:
             application/json:
               schema:
@@ -40,7 +40,7 @@ paths:
   /api/auth/login:
     post:
       summary: Login
-      description: Autentica o utilizador e devolve o token
+      description: Autenticar o utilizador
       tags:
         - Auth
       requestBody:
@@ -51,13 +51,13 @@ paths:
               $ref: '#/components/schemas/UserLoginRequest'
       responses:
         '200':
-          description: OK
+          description: Sucesso
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserLoginResponse'
         401:
-          description: Unauthorized
+          description: Erro
           content:
             application/json:
               schema:
@@ -65,6 +65,237 @@ paths:
                 properties:
                   error:
                     type: string
+
+  /api/pecas:
+    get:
+      summary: Obter todas as pecas
+      description: Obter uma lista de todas as pecas necessárias para a montagem de drones
+      tags:
+        - Pecas
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Peca'
+    post:
+      summary: Adicionar uma peca
+      description: Adicionar uma nova peca necessária para a montagem de drones
+      tags:
+        - Pecas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PecaCreateRequest'
+      responses:
+        '201':
+          description: Criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PecaCreateResponse'
+
+  /api/pecas/{id}:
+    get:
+      summary: Obter uma peca
+      description: Obter detalhes de uma peca específica
+      tags:
+        - Pecas
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID da peca
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Peca'
+        '404':
+          description: Não encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /api/montagens:
+    post:
+      summary: Criar uma montagem
+      description: Criar uma nova montagem de drone com as pecas especificadas
+      tags:
+        - Montagens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MontagemCreateRequest'
+      responses:
+        '201':
+          description: Criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MontagemCreateResponse'
+
+  /api/montagens/{id}:
+    get:
+      summary: Obter uma montagem
+      description: Obter detalhes de uma montagem de drone específica
+      tags:
+        - Montagens
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID da montagem
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Montagem'
+        '404':
+          description: Não encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    
+    put:
+      summary: Atualiza uma montagem de drone existente
+      tags:
+        - Montagens
+      parameters:
+        - name: id
+          in: path
+          description: Identificador da montagem a ser atualizada
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pecas:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      nome:
+                        type: string
+                      quantidade:
+                        type: integer
+                dataMontagem:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Montagem atualizada com sucesso!
+        '400':
+          description: Erro de validação!
+        '401':
+          description: Não autorizado!
+        '404':
+          description: Montagem não encontrada!
+  
+    delete:
+      summary: Elimina uma montagem de drone existente
+      tags:
+        - Montagens
+      parameters:
+        - name: id
+          in: path
+          description: Identificador da montagem a ser eliminada
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Montagem eliminada com sucesso!
+        '401':
+          description: Não autorizado!
+        '404':
+          description: Montagem não encontrada!
+                    
+                    
+  /api/montagens/utilizador/{id}:
+    get:
+      summary: Obter montagens de drones por utilizador
+      description: Obter uma lista de montagens de drones criadas por um utilizador específico
+      tags:
+        - Montagens
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID do utilizador
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Montagem'
+        '404':
+          description: Não encontrado!
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    
+  /api/estatisticas:
+    get:
+      summary: Obter estatísticas de montagem
+      description: Obter estatísticas sobre o processo de montagem, como o número total de montagens e as pecas mais utilizadas.
+      tags:
+        - Estatísticas
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numeroTotalMontagens:
+                    type: integer
+                    description: Número total de montagens
+                  pecasMaisUtilizadas:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Peca'
+                    description: Lista das pecas mais utilizadas
 
 components:
   securitySchemes:
@@ -111,13 +342,113 @@ components:
       properties:
         token:
           type: string
+          
+    Peca:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID da peca
+        nome:
+          type: string
+          description: Nome da peca
+        descrição:
+          type: string
+          description: Descrição da peca
+        tipo:
+          type: string
+          description: Tipo de peca
+        quantidade:
+          type: integer
+          description: Quantidade necessária da peca
+      
+    PecaCreateRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+          description: Nome da peca
+        descrição:
+          type: string
+          description: Descrição da peca
+        tipo:
+          type: string
+          description: Tipo de peca
+        quantidade:
+          type: integer
+          description: Quantidade necessária da peca
+      required:
+        - nome
+        - tipo
+        - quantidade
+
+    PecaCreateResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensagem de confirmação de criação da peca
+          
+    Montagem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID da montagem
+        data:
+          type: string
+          format: date-time
+          description: Data de montagem
+        pecas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Peca'
+          description: pecas utilizadas na montagem
+        utilizador:
+          type: string
+          description: ID do utilizador que criou a montagem
+
+    MontagemCreateRequest:
+      type: object
+      properties:
+        pecas:
+          type: array
+          items:
+            $ref: '#/components/schemas/PecaId'
+          description: IDs das pecas a serem utilizadas na montagem
+      required:
+        - pecas
+
+    MontagemCreateResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensagem de confirmação de criação da montagem
+
+    PecaId:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID da peca
+
 
 security:
   - bearerAuth: []
 
 tags:
   - name: Auth
-    description: Authentication endpoints
+    description: Endpoints de Auth
 
   - name: Users
-    description: User management endpoints
+    description: Endpoints de Users
+    
+  - name: Pecas
+    description: Endpoints de Pecas
+    
+  - name: Montagens
+    description: Enpoints de Montagens
+    
+  - name: Estatísticas
+    description: Endpoints de Estatísticas

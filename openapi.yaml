@@ -22,13 +22,13 @@ paths:
               $ref: '#/components/schemas/UserRegisterRequest'
       responses:
         '201':
-          description: Sucesso
+          description: created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserRegisterResponse'
         400:
-          description: Erro
+          description: invalid_input
           content:
             application/json:
               schema:
@@ -51,13 +51,13 @@ paths:
               $ref: '#/components/schemas/UserLoginRequest'
       responses:
         '200':
-          description: Sucesso
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserLoginResponse'
         401:
-          description: Erro
+          description: unauthorized
           content:
             application/json:
               schema:
@@ -74,7 +74,7 @@ paths:
         - Pecas
       responses:
         '200':
-          description: Sucesso
+          description: success
           content:
             application/json:
               schema:
@@ -94,7 +94,7 @@ paths:
               $ref: '#/components/schemas/PecaCreateRequest'
       responses:
         '201':
-          description: Sucesso
+          description: created
           content:
             application/json:
               schema:
@@ -115,13 +115,13 @@ paths:
           description: ID da peca
       responses:
         '200':
-          description: Sucesso
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Peca'
         '404':
-          description: Erro
+          description: not_found
           content:
             application/json:
               schema:
@@ -144,7 +144,7 @@ paths:
               $ref: '#/components/schemas/MontagemCreateRequest'
       responses:
         '201':
-          description: Sucesso
+          description: created
           content:
             application/json:
               schema:
@@ -165,13 +165,13 @@ paths:
           description: ID da montagem
       responses:
         '200':
-          description: Sucesso
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Montagem'
         '404':
-          description: Erro
+          description: not_found
           content:
             application/json:
               schema:
@@ -214,13 +214,13 @@ paths:
                   format: date
       responses:
         '200':
-          description: Montagem atualizada com sucesso!
+          description: success
         '400':
-          description: Erro de validação!
+          description: invalid_input
         '401':
-          description: Não autorizado!
+          description: unauthorized
         '404':
-          description: Montagem não encontrada!
+          description: not_found
   
     delete:
       summary: Elimina uma montagem de drone existente
@@ -235,11 +235,11 @@ paths:
             type: integer
       responses:
         '204':
-          description: Montagem eliminada com sucesso!
+          description: no_content
         '401':
-          description: Não autorizado!
+          description: unauthorized
         '404':
-          description: Montagem não encontrada!
+          description: not_found
                     
                     
   /api/montagens/utilizador/{id}:
@@ -257,7 +257,7 @@ paths:
           description: ID do utilizador
       responses:
         '200':
-          description: Sucesso
+          description: success
           content:
             application/json:
               schema:
@@ -265,7 +265,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Montagem'
         '404':
-          description: Erro
+          description: not_found
           content:
             application/json:
               schema:
@@ -282,7 +282,7 @@ paths:
         - Estatísticas
       responses:
         '200':
-          description: Sucesso
+          description: success
           content:
             application/json:
               schema:

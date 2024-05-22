@@ -74,7 +74,7 @@ paths:
         - Pecas
       responses:
         '200':
-          description: OK
+          description: Sucesso
           content:
             application/json:
               schema:
@@ -94,7 +94,7 @@ paths:
               $ref: '#/components/schemas/PecaCreateRequest'
       responses:
         '201':
-          description: Criado
+          description: Sucesso
           content:
             application/json:
               schema:
@@ -115,13 +115,13 @@ paths:
           description: ID da peca
       responses:
         '200':
-          description: OK
+          description: Sucesso
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Peca'
         '404':
-          description: Não encontrado
+          description: Erro
           content:
             application/json:
               schema:
@@ -144,7 +144,7 @@ paths:
               $ref: '#/components/schemas/MontagemCreateRequest'
       responses:
         '201':
-          description: Criado
+          description: Sucesso
           content:
             application/json:
               schema:
@@ -165,13 +165,13 @@ paths:
           description: ID da montagem
       responses:
         '200':
-          description: OK
+          description: Sucesso
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Montagem'
         '404':
-          description: Não encontrado
+          description: Erro
           content:
             application/json:
               schema:
@@ -257,7 +257,7 @@ paths:
           description: ID do utilizador
       responses:
         '200':
-          description: OK
+          description: Sucesso
           content:
             application/json:
               schema:
@@ -265,7 +265,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Montagem'
         '404':
-          description: Não encontrado!
+          description: Erro
           content:
             application/json:
               schema:
@@ -282,7 +282,7 @@ paths:
         - Estatísticas
       responses:
         '200':
-          description: OK
+          description: Sucesso
           content:
             application/json:
               schema:

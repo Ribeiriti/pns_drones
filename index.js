@@ -1,19 +1,21 @@
 const express = require('express');
-const {connect} = require('./shared/database');
-const authController = require('./controllers/authController');
-const openapiBackend = require('openapi-backend');
-const spec = require('./openapi.yaml');
-const app = openapiBackend(spec);
-
-
 const app = express();
-app.use(express.json());
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
-connect();
+mongoose.connect('mongodb://localhost:27017/projecto_final/users', { useNewUrlParser: true, useUnifiedTopology: true });
 
-app.post('/api/auth/registo', authController.register);
-app.post('/api/auth/login', authController.login);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const authRoutes = require('./routes/auth');
+const partsRoutes = require('./routes/parts');
+const assembliesRoutes = require('./routes/assemblies');
+
+app.use('/api/auth', authRoutes);
+app.use('/api/parts', partsRoutes);
+app.use('/api/assemblies', assembliesRoutes);
 
 app.listen(3000, () => {
-  console.log('Porta 3000');
+  console.log('Server listening on port 3000');
 });
